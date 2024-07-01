@@ -1,6 +1,8 @@
 package io.ballerina.stdlib.data.csvdata.utils;
 
 import io.ballerina.runtime.api.TypeTags;
+import io.ballerina.runtime.api.creators.TypeCreator;
+import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.flags.SymbolFlags;
 import io.ballerina.runtime.api.types.*;
 import io.ballerina.runtime.api.utils.StringUtils;
@@ -271,6 +273,15 @@ public class CsvUtils {
 
         String lineTerminator = StringUtils.getStringValue(StringUtils.fromString(lineTerminatorObj.toString()));
         return lineTerminator.equals(stringValue);
+    }
+
+    public static BArray convertBArrayOrBtableObjectValueToBArray(Object value) {
+        if (value instanceof BArray arrayValue) {
+            return arrayValue;
+        }
+        BTable tableValue = (BTable) value;
+        return ValueCreator.createArrayValue(tableValue.values().toArray(), TypeCreator
+                        .createArrayType(((TableType) tableValue.getType()).getConstrainedType()));
     }
 
     public static class SortConfigurations {

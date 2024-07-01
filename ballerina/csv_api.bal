@@ -16,14 +16,14 @@
 
 import ballerina/jballerina.java;
 
-public isolated function parseStringToRecord(string s, parseToRecordOption options = {}, typedesc<record{}[]> t = <>)
+public isolated function parseStringToRecord(string s, parseToRecordOption options = {}, typedesc<record{}[]|table<record{}>> t = <>)
       returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
 
-public isolated function parseBytesToRecord(byte[] s, parseToRecordOption options = {}, typedesc<record{}[]> t = <>)
+public isolated function parseBytesToRecord(byte[] s, parseToRecordOption options = {}, typedesc<record{}[]|table<record{}>> t = <>)
       returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
 
 public isolated function parseStreamToRecord(stream<byte[], error?> s,
-            parseToRecordOption options = {}, typedesc<record{}[]> t = <>)
+            parseToRecordOption options = {}, typedesc<record{}[]|table<record{}>> t = <>)
       returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
 
 public isolated function parseStringToList(string s, ParseOption options = {}, typedesc<anydata[][]> t = <>)
@@ -36,16 +36,16 @@ public isolated function parseStreamToList(stream<byte[], error?> s,
             ParseOption options = {}, typedesc<anydata[][]> t = <>)
        returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
 
-public isolated function parseRecordAsRecordType(record{}[] s,
-            RecordAsRecordOption options = {}, typedesc<record{}[]> t = <>)
+public isolated function parseRecordAsRecordType(record{}[]|table<record{}> s,
+            RecordAsRecordOption options = {}, typedesc<record{}[]|table<record{}>> t = <>)
       returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
 
-public isolated function parseRecordAsListType(record{}[] s, string[] headerNames,
+public isolated function parseRecordAsListType(record{}[]|table<record{}> s, string[] headerNames,
             Options options = {}, typedesc<anydata[][]> t = <>)
       returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
 
 public isolated function parseListAsRecordType(string[][] s, string[]? customHeaders = (),
-            ListAsRecordOption options = {}, typedesc<record{}[]> t = <>)
+            ListAsRecordOption options = {}, typedesc<record{}[]|table<record{}>> t = <>)
       returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
 
 public isolated function parseListAsListType(string[][] s, ListAsListOption options = {}, typedesc<anydata[][]> t = <>)

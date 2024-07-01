@@ -27,6 +27,7 @@ import io.ballerina.runtime.api.types.*;
 import io.ballerina.runtime.api.utils.TypeUtils;
 import io.ballerina.runtime.api.values.BArray;
 import io.ballerina.runtime.api.values.BError;
+import io.ballerina.runtime.api.values.BTable;
 import io.ballerina.runtime.api.values.BTypedesc;
 import io.ballerina.stdlib.data.csvdata.utils.CsvConfig;
 import io.ballerina.stdlib.data.csvdata.utils.CsvUtils;
@@ -96,7 +97,7 @@ public class CsvParser {
         Object currentCsvNode;
         Stack<String> currentEscapeCharacters = new Stack<>();
         ArrayList<String> headers = new ArrayList<>();
-        BArray rootCsvNode;
+        Object rootCsvNode;
         Map<String, Field> fieldHierarchy = new HashMap<>();
         Map<String, String> updatedRecordFieldNames = new HashMap<>();
         HashSet<String> fields = new HashSet<>();
@@ -120,6 +121,7 @@ public class CsvParser {
         boolean isQuoteClosed = false;
         boolean isIntersectionElementType = false;
         private StringBuilder hexBuilder = new StringBuilder(4);
+        boolean isExpTypeTable = false;
         StateMachine() {
             reset();
         }
@@ -151,6 +153,7 @@ public class CsvParser {
             hexBuilder = new StringBuilder(4);
             isQuoteClosed = false;
             isIntersectionElementType = false;
+            isExpTypeTable = false;
         }
 
         private static boolean isWhitespace(char ch, Object lineTerminator) {
@@ -202,12 +205,17 @@ public class CsvParser {
 
             if (referredType.getTag() == TypeTags.UNION_TAG) {
                 expectedArrayElementType = referredType;
-            } else if (referredType.getTag() != TypeTags.ARRAY_TAG) {
-                throw DiagnosticLog.error(DiagnosticErrorCode.INVALID_TYPE, type);
-            } else {
+            } else if (referredType.getTag() == TypeTags.TABLE_TAG) {
+                isExpTypeTable = true;
+                TableType tableType = (TableType) referredType;
+                expectedArrayElementType = TypeUtils.getReferredType(tableType.getConstrainedType());
+                rootCsvNode = ValueCreator.createTableValue(tableType);
+            } else if (referredType.getTag() == TypeTags.ARRAY_TAG) {
                 rootArrayType = (ArrayType) referredType;
                 expectedArrayElementType = TypeUtils.getReferredType(rootArrayType.getElementType());
                 rootCsvNode = ValueCreator.createArrayValue(rootArrayType);
+            } else {
+                throw DiagnosticLog.error(DiagnosticErrorCode.INVALID_TYPE, type);
             }
 
             switch (expectedArrayElementType.getTag()) {
@@ -576,10 +584,16 @@ public class CsvParser {
         }
 
         private static void finalizeTheRow(StateMachine sm) {
-            int rootArraySize = sm.rootArrayType.getSize();
-//            updateOptionalFields(sm);
+            int rootArraySize = Integer.MAX_VALUE;
+            if (!sm.isExpTypeTable) {
+                rootArraySize = sm.rootArrayType.getSize();
+            }
             if (rootArraySize == -1 || sm.rowIndex < rootArraySize) {
-                sm.rootCsvNode.append(sm.currentCsvNode);
+                if (sm.rootCsvNode instanceof BArray rootCsvNode) {
+                    rootCsvNode.append(sm.currentCsvNode);
+                    return;
+                }
+                ((BTable) (sm.rootCsvNode)).add(sm.currentCsvNode);
             }
         }
 

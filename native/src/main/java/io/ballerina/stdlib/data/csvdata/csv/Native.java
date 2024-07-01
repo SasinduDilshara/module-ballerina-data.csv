@@ -33,6 +33,8 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 
+import static io.ballerina.stdlib.data.csvdata.utils.CsvUtils.convertBArrayOrBtableObjectValueToBArray;
+
 /**
  * Csv conversion.
  *
@@ -116,19 +118,19 @@ public class Native {
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public static Object parseRecordAsRecordType(BArray csv, BMap<BString, Object> options, BTypedesc type) {
+    public static Object parseRecordAsRecordType(Object csv, BMap<BString, Object> options, BTypedesc type) {
         try {
-            return CsvTraversal.traverse(csv, CsvConfig.createRecordAsRecordOption(options), type);
+            return CsvTraversal.traverse(convertBArrayOrBtableObjectValueToBArray(csv), CsvConfig.createRecordAsRecordOption(options), type);
         } catch (Exception e) {
             return DiagnosticLog.getCsvError(e.getMessage());
         }
     }
-    public static Object parseRecordAsListType(BArray csv, BArray headers,
+    public static Object parseRecordAsListType(Object csv, BArray headers,
                                                BMap<BString, Object> options, BTypedesc type) {
         try {
             CsvConfig toRecordOptions = CsvConfig.createToRecordOptions(options);
             toRecordOptions.headersOrder = headers;
-            return CsvTraversal.traverse(csv, toRecordOptions, type);
+            return CsvTraversal.traverse(convertBArrayOrBtableObjectValueToBArray(csv), toRecordOptions, type);
         } catch (Exception e) {
             return DiagnosticLog.getCsvError(e.getMessage());
         }

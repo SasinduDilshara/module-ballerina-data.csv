@@ -1,24 +1,24 @@
 import ballerina/test;
 
-boolean enable = true;
+// boolean enable = true;
 
-@test:Config {enable: !enable}
-function debugTest() returns error? {
-    var value1 = [{a: 1, c: 1, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1},
-                  {a: 1, c: 1, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1}];
-    var value2 = [{a: 1, c: int:MAX_VALUE, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1},
-                  {a: 1, c: 1, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1}]; 
-    var value3 = [[1, 1, 1, 1, "a", 1, 1, 1],
-                  [1, 1, 1, 1, "a", 1, 1, 1]];
-    var value4 = [["1", "1", "1", "1", "a", "1", "1", "1"],
-                  ["1", "1", "1", "1", "a", "1", "1", "1"]];
+// @test:Config {enable: !enable}
+// function debugTest() returns error? {
+//     var value1 = [{a: 1, c: 1, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1},
+//                   {a: 1, c: 1, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1}];
+//     var value2 = [{a: 1, c: int:MAX_VALUE, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1},
+//                   {a: 1, c: 1, d: 1, e: 1, f: "a", g: 1, h: 1, i: 1}]; 
+//     var value3 = [[1, 1, 1, 1, "a", 1, 1, 1],
+//                   [1, 1, 1, 1, "a", 1, 1, 1]];
+//     var value4 = [["1", "1", "1", "1", "a", "1", "1", "1"],
+//                   ["1", "1", "1", "1", "a", "1", "1", "1"]];
 
-    // SubtypeRecord2[]|CsvConversionError a14 = parseListAsRecordType(value4, 
-    //                                 ["a", "c", "d", "e", "f", "g", "h", "i"], {});
-    record {int a; int b;}[]|CsvConversionError a14 = parseListAsRecordType([["1", "2"], ["1", "2"]], 
-                                    ["a", "b"], {});
-    test:assertEquals(a14, [{a: 1, c: 1}, {a: 1, c: 1}]);
-}
+//     // SubtypeRecord2[]|CsvConversionError a14 = parseListAsRecordType(value4, 
+//     //                                 ["a", "c", "d", "e", "f", "g", "h", "i"], {});
+//     record {int a; int b;}[]|CsvConversionError a14 = parseListAsRecordType([["1", "2"], ["1", "2"]], 
+//                                     ["a", "b"], {});
+//     test:assertEquals(a14, [{a: 1, c: 1}, {a: 1, c: 1}]);
+// }
 
 type Singleton 1; 
 
@@ -223,3 +223,4 @@ function testSubtypeExpectedTypes() returns error? {
 }
 
 // Add implementation for source as Tuples
+// Add intersection inside the Parser

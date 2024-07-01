@@ -77,11 +77,12 @@ public class CsvTraversal {
         HashSet<String> fields = new HashSet<>();
         Type restType;
         Deque<String> fieldNames = new ArrayDeque<>();
-        BArray rootCsvNode;
+        Object rootCsvNode;
         Type expectedArrayElementType;
         Type sourceArrayElementType;
         CsvConfig config;
         String[] headers = null;
+        boolean isExpTypeTable = false;
 
         void reset() {
             currentCsvNode = null;
@@ -97,6 +98,7 @@ public class CsvTraversal {
             sourceArrayElementType = null;
             headers = null;
             config = null;
+            isExpTypeTable = false;
         }
 
         @SuppressWarnings("unchecked")
@@ -126,7 +128,10 @@ public class CsvTraversal {
                         }
                     }
                 }
-                int expectedArraySize = ((ArrayType) referredType).getSize();
+                int expectedArraySize = Integer.MAX_VALUE;
+                if (!isExpTypeTable) {
+                    expectedArraySize = ((ArrayType) referredType).getSize();
+                }
                 setRootCsvNodeForNonUnionArrays(referredType, type);
                 validateExpectedArraySize(expectedArraySize, sourceArraySize);
                 traverseCsvWithExpectedType(expectedArraySize, sourceArraySize, csv, type);
@@ -703,6 +708,13 @@ public class CsvTraversal {
                 ArrayType arrayType = (ArrayType) referredType;
                 rootCsvNode = ValueCreator.createArrayValue(arrayType);
                 expectedArrayElementType = TypeUtils.getReferredType((arrayType).getElementType());
+                return;
+            }
+            if (referredType.getTag() == TypeTags.TABLE_TAG) {
+                isExpTypeTable = true;
+                TableType tableType = (TableType) referredType;
+                rootCsvNode = ValueCreator.createTableValue(tableType);
+                expectedArrayElementType = TypeUtils.getReferredType(tableType.getConstrainedType());
                 return;
             }
             throw DiagnosticLog.error(DiagnosticErrorCode.INVALID_TYPE, type, PredefinedTypes.TYPE_ANYDATA_ARRAY);
