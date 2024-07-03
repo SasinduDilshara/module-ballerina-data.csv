@@ -18,10 +18,4 @@
 
 module io.ballerina.stdlib.data {
     requires io.ballerina.runtime;
-    requires io.ballerina.lang.value;
-    requires junit;
-    requires org.apache.commons.lang3;
-    requires io.ballerina.stdlib.constraint;
-    exports io.ballerina.stdlib.data.csvdata.csv;
-    exports io.ballerina.stdlib.data.csvdata.utils;
 }

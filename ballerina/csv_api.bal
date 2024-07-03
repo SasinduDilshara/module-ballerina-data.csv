@@ -50,5 +50,3 @@ public isolated function parseListAsRecordType(string[][] s, string[]? customHea
 
 public isolated function parseListAsListType(string[][] s, ListAsListOption options = {}, typedesc<anydata[][]> t = <>)
       returns t|CsvConversionError = @java:Method {'class: "io.ballerina.stdlib.data.csvdata.csv.Native"} external;
-
-// --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
