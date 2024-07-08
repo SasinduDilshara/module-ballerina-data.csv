@@ -1,5 +1,13 @@
 import ballerina/test;
 
+// @test:Config
+// function test() returns error? {
+//     string csvValue = string `a,b${"\n"} 1,"2\n3"`;
+
+//     record {}[]|Error cn = parseStringToRecord(csvValue, {header: 0, lineTerminator: [CRLF, LF]});
+//     test:assertEquals(cn, [{a: 1, b: "2\n3"}]);
+// }
+
 @test:Config
 function testCustomNameAnnotation() returns error? {
     RecordWithCustomAnnotation[]|Error cn1 = parseStringToRecord(string `b,c

@@ -1,6 +1,6 @@
 // Valid parser options
 ParseOption option1 = {delimiter: "@", nilValue: "null", lineTerminator: [LF]};
-ParseOption option2 = {nilValue: "N/A", lineTerminator: [CR, LF], comment: "/"};
+ParseOption option2 = {nilValue: "N/A", lineTerminator: [CRLF, LF], comment: "/"};
 ParseOption option3 = {nilValue: "()", header: 1, skipLines: [1, 2]};
 ParseOption option4 = {nilValue: "", header: 4, skipLines: "1-5"};
 ParseOption option5 = {nilValue: "", header: 4, skipLines: "1-1"};
@@ -15,7 +15,7 @@ parseToRecordOption ptOption5 = {header: false, skipLines: [-1, -2, 5, 3]};
 // Invalid parser options
 ParseOption invalidParserOptions1 = {header: 4};
 ParseOption invalidParserOptions2 = {comment: "$"};
-ParseOption invalidParserOptions3 = {lineTerminator: CR};
+ParseOption invalidParserOptions3 = {lineTerminator: CRLF};
 ParseOption invalidParserOptions4 = {skipLines: [1000, 1001]};
 ParseOption invalidParserOptions5 = {skipLines: "a-b"};
 ParseOption invalidParserOptions6 = {skipLines: "3-1"};

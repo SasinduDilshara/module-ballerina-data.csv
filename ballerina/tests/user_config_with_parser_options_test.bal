@@ -834,23 +834,24 @@ function testDelimiterWithParserOptions() {
 
 @test:Config
 function testLineTerminatorWithParserOptions() {
-    string csvValue = string `a,b${"\n"} 1,"2\n3"`;
+    string csvValue = string `a,b
+                                 1,"2\n3"`;
 
-    record {}[]|Error cn = parseStringToRecord(csvValue, {header: 0, lineTerminator: LF});
+    record {}[]|Error cn = parseStringToRecord(csvValue, {header: 0, lineTerminator: [CRLF, LF]});
     test:assertEquals(cn, [{a: 1, b: "2\n3"}]);
 
-    cn = parseStringToRecord(csvValue, {header: 0, lineTerminator: [LF]});
+    cn = parseStringToRecord(csvValue, {header: 0, lineTerminator: [CRLF, LF]});
     test:assertEquals(cn, [{a: 1, b: "2\n3"}]);
 
-    cn = parseStringToRecord(csvValue, {header: 0, lineTerminator: [CRLF, LF, CR]});
+    cn = parseStringToRecord(csvValue, {header: 0, lineTerminator: [CRLF, LF]});
     test:assertEquals(cn, [{a: 1, b: "2\n3"}]);
 
-    anydata[][]|Error cn2 = parseStringToList(csvValue, {header: 0, lineTerminator: LF});
+    anydata[][]|Error cn2 = parseStringToList(csvValue, {header: 0, lineTerminator: [CRLF, LF]});
     test:assertEquals(cn2, [[1, "2\n3"]]);
 
-    cn2 = parseStringToList(csvValue, {header: 0, lineTerminator: [LF]});
+    cn2 = parseStringToList(csvValue, {header: 0, lineTerminator: [CRLF, LF]});
     test:assertEquals(cn2, [[1, "2\n3"]]);
 
-    cn2 = parseStringToList(csvValue, {header: 0, lineTerminator: [CRLF, LF, CR]});
+    cn2 = parseStringToList(csvValue, {header: 0, lineTerminator: [CRLF, LF]});
     test:assertEquals(cn2, [[1, "2\n3"]]);
 }

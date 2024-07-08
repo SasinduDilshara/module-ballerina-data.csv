@@ -23,6 +23,12 @@ import java.util.Optional;
 import static io.ballerina.stdlib.data.csvdata.utils.Constants.SKIP_LINE_RANGE_SEP;
 
 public class CsvUtils {
+    public static boolean isCarriageTokenPresent = false;
+
+    public static void setCarriageTokenPresent(boolean isCarriageTokenPresent) {
+        CsvUtils.isCarriageTokenPresent = isCarriageTokenPresent;
+    }
+
     public static void validateExpectedArraySize(int size, int currentSize) {
         if (size != -1 && size > currentSize) {
             throw DiagnosticLog.error(DiagnosticErrorCode.INVALID_EXPECTED_ARRAY_SIZE, currentSize);
@@ -267,19 +273,32 @@ public class CsvUtils {
     }
 
     public static boolean isCharContainsInLineTerminatorUserConfig(char c, Object lineTerminatorObj) {
-        String stringValue = Character.toString(c);
         if (lineTerminatorObj instanceof BArray) {
             Object[] lineTerminators = ((BArray) lineTerminatorObj).getValues();
             for (Object lineTerminator: lineTerminators) {
-                if (lineTerminator != null && lineTerminator.toString().equals(stringValue)) {
-                    return true;
+                if (lineTerminator != null && c == Constants.LineTerminator.LF) {
+                    String lineTerminatorString = lineTerminator.toString();
+                    if (lineTerminatorString.equals(Constants.LineTerminator.LF)) {
+                        return true;
+                    }
+                    if (isCarriageTokenPresent && lineTerminatorString.equals(Constants.LineTerminator.CRLF)) {
+                        return true;
+                    }
                 }
             }
             return false;
         }
 
         String lineTerminator = StringUtils.getStringValue(StringUtils.fromString(lineTerminatorObj.toString()));
-        return lineTerminator.equals(stringValue);
+        if (c == Constants.LineTerminator.LF) {
+            if (lineTerminator.equals(Constants.LineTerminator.LF)) {
+                return true;
+            }
+            if (isCarriageTokenPresent && lineTerminator.equals(Constants.LineTerminator.CRLF)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static class SortConfigurations {
