@@ -32,7 +32,6 @@ public class CsvConfig {
     public Object nilValue = null;
     public char comment = '#';
     public String locale = "EN/US";
-    public String encoding = "UTF-8";
     public boolean nilAsOptionalField = false;
     public boolean absentAsNilableType = false;
     public boolean allowDataProjection = true;
@@ -51,7 +50,6 @@ public class CsvConfig {
         this.nilValue = config.nilValue;
         this.comment = config.comment;
         this.locale = config.locale;
-        this.encoding = config.encoding;
     }
 
     private CsvConfig(Object skipLines, boolean nilAsOptionalField,
@@ -137,7 +135,6 @@ public class CsvConfig {
         this.nilValue = nilValue == null ? null : nilValue;
         this.comment = comment;
         this.locale = locale;
-        this.encoding = encoding;
         this.nilAsOptionalField = nilAsOptionalField;
         this.absentAsNilableType = absentAsNilableType;
         this.allowDataProjection = allowDataProjection;
@@ -156,7 +153,6 @@ public class CsvConfig {
         this.nilValue = nilValue == null ? null : nilValue;
         this.comment = comment;
         this.locale = locale;
-        this.encoding = encoding;
         this.nilAsOptionalField = nilAsOptionalField;
         this.absentAsNilableType = absentAsNilableType;
         this.allowDataProjection = allowDataProjection;

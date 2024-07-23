@@ -298,9 +298,7 @@ public class CsvParser {
                     }
                 }
                 return rootCsvNode;
-            } catch (IOException e) {
-                throw DiagnosticLog.error(DiagnosticErrorCode.INVALID_TOKEN, e.getMessage(), line, column);
-            } catch (CsvParserException e) {
+            } catch (IOException | CsvParserException e) {
                 throw DiagnosticLog.error(DiagnosticErrorCode.INVALID_TOKEN, e.getMessage(), line, column);
             }
         }
